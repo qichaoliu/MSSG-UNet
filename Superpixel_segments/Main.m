@@ -18,16 +18,14 @@ switch(FLAG)
 end
 
 [h,w,c]=size(hsi);
-pcaMap=reshape(hsi,[h*w,c]);
-
-pcaMap=pca(pcaMap');
-pcaMap=pcaMap(:,1:3);
-pcaMap=pcaMap';
-pcaMap=(mapminmax( pcaMap)+1)/2*255;
-pcaMap=uint8(pcaMap)';
-pcaMap=reshape(pcaMap,[h,w,3]);
+% hsi=medfilt3(hsi,[3,3,1]);
+hsi = imfilter(hsi, fspecial('gaussian'), 'replicate');
+hsi=mapminmax( reshape(hsi,[h*w,c])');
+pcaMap=pca(hsi);
+pcaMap=pcaMap(:,1:3)';
+pcaMap=(mapminmax(pcaMap)+1)/2*255;%3*21025
+pcaMap=reshape(uint8(pcaMap)',[h,w,3]);
 I=pcaMap;
-
 E=uint8(zeros([h,w]));
 
 % fine detail structure
