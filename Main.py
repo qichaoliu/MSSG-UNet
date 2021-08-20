@@ -15,20 +15,6 @@ import dcor
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # device = torch.device("cpu" )
 
-# FLAG =1, indian
-# FLAG =2, paviaU
-# FLAG =3, salinas
-samples_type = ['ratio', 'same_num'][0]
-
-# for (FLAG, curr_train_ratio) in [(1,5),(1,10),(1,15),(1,20),(1,25),
-# (2,5),(2,10),(2,15),(2,20),(2,25),
-# (3,5),(3,10),(3,15),(3,20),(3,25)]:#(2,0.01),(3,0.01) (1,0.1),(2,0.01),(3,0.01)
-# # for (FLAG, curr_train_ratio) in [(1,25),(3,25)]:
-
-# for (FLAG, curr_train_ratio,Scale) in [(1,0.1,100),(1,0.1,200),(1,0.1,300),(1,0.1,400),(1,0.1,500),
-# (2,0.01,100),(2,0.01,200),(2,0.01,300),(2,0.01,400),(2,0.01,500),
-# (3,0.01,100),(3,0.01,200),(3,0.01,300),(3,0.01,400),(3,0.01,500)]:
-# for (FLAG, curr_train_ratio,Scale) in [(3,5,100),(3,25,100)]:
 for Neighbors in [0]: #0, 5,10,15,20
     # for (FLAG, curr_train_ratio,Unet_Depth) in [ (1,0.05,1),(1,0.05,2),(1,0.05,3),(1,0.05,4),
     #                                              (2,0.005,1),(2,0.005,2),(2,0.005,3),(2,0.005,4),
@@ -37,9 +23,9 @@ for Neighbors in [0]: #0, 5,10,15,20
     #                                              (2,5,4),(2,10,4),(2,15,4),(2,20,4),(2,25,4),
     #                                              (3,5,4),(3,10,4),(3,15,4),(3,20,4),(3,25,4)]:
     for (FLAG, curr_train_ratio,Unet_Depth) in [(1,0.05,4)]: #(1,0.05,4),,(3,0.005,4)(2,0.005,4),(3,0.005,4)(2,0.005,4),(3,0.005,4)
-    # for (FLAG, curr_train_ratio, Unet_Depth) in [(2,0.005,4),(3,0.005,4)]: #visualize(1, 0.05, 4),
         torch.cuda.empty_cache()
         OA_ALL = [];AA_ALL = [];KPP_ALL = [];AVG_ALL = [];Train_Time_ALL=[];Test_Time_ALL=[]
+        samples_type = 'ratio' if curr_train_ratio < 1 else 'same_num'
         
         # Seed_List=[0,1,2,3,4,5,6,7,8,9]
         # Seed_List=[0,1,2,3,4]
@@ -53,13 +39,11 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('HyperImage_data\\indian\\Indian_pines_gt.mat')
             gt = gt_mat['indian_pines_gt']
             
-            # 参数预设
-            # train_ratio = 0.05  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 16  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch =600  # 迭代次数
-            dataset_name = "indian_"  # 数据集名称
+            val_ratio = 0.01 
+            class_count = 16  
+            learning_rate = 5e-4  
+            max_epoch =600 
+            dataset_name = "indian_" 
             pass
         if FLAG == 2:
             data_mat = sio.loadmat('..\\HyperImage_data\\paviaU\\PaviaU.mat')
@@ -67,13 +51,11 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('..\\HyperImage_data\\paviaU\\Pavia_University_gt.mat')
             gt = gt_mat['pavia_university_gt']
             
-            # 参数预设
-            # train_ratio = 0.01  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.005  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 9  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "paviaU_"  # 数据集名称
+            val_ratio = 0.005  
+            class_count = 9 
+            learning_rate = 5e-4  
+            max_epoch = 600 
+            dataset_name = "paviaU_"  
             pass
         if FLAG == 3:
             data_mat = sio.loadmat('..\\HyperImage_data\\Salinas\\Salinas_corrected.mat')
@@ -81,13 +63,11 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('..\\HyperImage_data\\Salinas\\Salinas_gt.mat')
             gt = gt_mat['salinas_gt']
             
-            # 参数预设
-            # train_ratio = 0.005  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.005  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 16  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "salinas_"  # 数据集名称
+            val_ratio = 0.005 
+            class_count = 16 
+            learning_rate = 5e-4 
+            max_epoch = 600  
+            dataset_name = "salinas_" 
             pass
         if FLAG == 4:
             data_mat = sio.loadmat('..\\HyperImage_data\\KSC\\KSC.mat')
@@ -95,13 +75,11 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('..\\HyperImage_data\\KSC\\KSC_gt.mat')
             gt = gt_mat['KSC_gt']
             
-            # 参数预设
-            train_ratio = 0.05  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 13  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "KSC_"  # 数据集名称
+            val_ratio = 0.01  
+            class_count = 13  
+            learning_rate = 5e-4  
+            max_epoch = 600  
+            dataset_name = "KSC_" 
             pass
         if FLAG == 5:
             data_mat = sio.loadmat('..\\HyperImage_data\\Houston2013\\Houston.mat')
@@ -109,60 +87,51 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('..\\HyperImage_data\\Houston2013\\Houston_GT_New.mat')
             gt = gt_mat['Houston_GT']
             
-            # 参数预设
-            train_ratio = 0.01  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 15  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "Houston_"  # 数据集名称
+            val_ratio = 0.01 
+            class_count = 15  
+            learning_rate = 5e-4  
+            max_epoch = 600 
+            dataset_name = "Houston_"  
             pass
         if FLAG == 6:
             data_mat = sio.loadmat('..\\HyperImage_data\\HyRANK\\Loukia.mat')
             data = data_mat['Loukia']
             gt_mat = sio.loadmat('..\\HyperImage_data\\HyRANK\\Loukia_GT.mat')
             gt = gt_mat['Loukia_GT']
-    
-            # 参数预设
-            train_ratio = 0.01  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 14  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "Loukia_"  # 数据集名称
+            
+            val_ratio = 0.01 
+            class_count = 14  
+            learning_rate = 5e-4  
+            max_epoch = 600  
+            dataset_name = "Loukia_" 
             pass
         if FLAG == 7:
             data_mat = sio.loadmat('..\\HyperImage_data\\paviaC\\paviaC.mat')
             data = data_mat['resultNew']
             gt_mat = sio.loadmat('..\\HyperImage_data\\paviaC\\pavia_center_gt.mat')
             gt = gt_mat['pavia_center_label']
-    
-            # 参数预设
-            train_ratio = 0.01  # 训练集比例。注意，训练集为按照‘每类’随机选取
-            val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
-            class_count = 9  # 样本类别数
-            learning_rate = 5e-4  # 学习率
-            max_epoch = 600  # 迭代次数
-            dataset_name = "paviaC_"  # 数据集名称
+
+            val_ratio = 0.01  
+            class_count = 9  
+            learning_rate = 5e-4  
+            max_epoch = 600  
+            dataset_name = "paviaC_"  
             pass
-        ###########
-        if samples_type == 'same_num': val_ratio = 1# 当定义为每类样本个数时,则该参数更改为训练样本数
+
+        if samples_type == 'same_num': val_ratio = 1 ########
         
         train_ratio = curr_train_ratio
         cmap = cm.get_cmap('jet', class_count + 1)
         plt.set_cmap(cmap)
-        m, n, d = data.shape  # 高光谱数据的三个维度
+        m, n, d = data.shape  
     
-        # 数据standardization标准化,即提前全局BN
         orig_data=data
-        height, width, bands = data.shape  # 原始高光谱数据的三个维度
+        height, width, bands = data.shape  
         data = np.reshape(data, [height * width, bands])
         minMax = preprocessing.StandardScaler()
         data = minMax.fit_transform(data)
         data = np.reshape(data, [height, width, bands])
         
-        
-        # 打印每类样本个数
         gt_reshape=np.reshape(gt, [-1])
         samplesCount_list = []
         for i in range(class_count):
@@ -179,10 +148,9 @@ for Neighbors in [0]: #0, 5,10,15,20
             train_samples_gt_onehot = np.reshape(train_samples_gt_onehot, [-1, class_count]).astype(int)
             test_samples_gt_onehot = np.reshape(test_samples_gt_onehot, [-1, class_count]).astype(int)
             val_samples_gt_onehot = np.reshape(val_samples_gt_onehot, [-1, class_count]).astype(int)
-            Test_GT = np.reshape(test_samples_gt, [m, n])  # 测试样本图
+            Test_GT = np.reshape(test_samples_gt, [m, n])  
             
             
-            # 打印训练 验证 测试样本数量
             train_val_test_gt=[train_samples_gt,val_samples_gt,test_samples_gt]
             for type in range(3):
                 gt_reshape = np.reshape(train_val_test_gt[type], [-1])
@@ -194,9 +162,6 @@ for Neighbors in [0]: #0, 5,10,15,20
                     samplesCount_list.append(samplesCount)
                 print(samplesCount_list)
             
-    
-            ############制作训练数据和测试数据的gt掩膜.根据GT将带有标签的像元设置为全1向量##############
-            # 训练集
             train_label_mask = np.zeros([m * n, class_count])
             temp_ones = np.ones([class_count])
             train_samples_gt = np.reshape(train_samples_gt, [m * n])
@@ -205,7 +170,7 @@ for Neighbors in [0]: #0, 5,10,15,20
                     train_label_mask[i] = temp_ones
             train_label_mask = np.reshape(train_label_mask, [m* n, class_count])
     
-            # 测试集
+
             test_label_mask = np.zeros([m * n, class_count])
             temp_ones = np.ones([class_count])
             test_samples_gt = np.reshape(test_samples_gt, [m * n])
@@ -214,7 +179,7 @@ for Neighbors in [0]: #0, 5,10,15,20
                     test_label_mask[i] = temp_ones
             test_label_mask = np.reshape(test_label_mask, [m* n, class_count])
     
-            # 验证集
+
             val_label_mask = np.zeros([m * n, class_count])
             temp_ones = np.ones([class_count])
             val_samples_gt = np.reshape(val_samples_gt, [m * n])
@@ -223,7 +188,7 @@ for Neighbors in [0]: #0, 5,10,15,20
                     val_label_mask[i] = temp_ones
             val_label_mask = np.reshape(val_label_mask, [m* n, class_count])
 
-            ##################### 产生分层分配矩阵S和邻接矩阵A
+
             data_for_segment = np.reshape(data, [height, width, -1])
             tic = time.clock()
             # ST = SegmentTree(data_for_segment,np.reshape(train_samples_gt,[height,width]))
@@ -241,7 +206,7 @@ for Neighbors in [0]: #0, 5,10,15,20
             S_list=S_list[0:int(Unet_Depth)]
             A_list=A_list[0:int(Unet_Depth)]
             
-            # 输出每层的最小-最大邻居数量
+
             for i in range(Unet_Depth):
                 a=A_list[i].sum(-1)
                 print(a.min(),a.max(),a.mean())
@@ -257,15 +222,15 @@ for Neighbors in [0]: #0, 5,10,15,20
                 S_list_gpu.append(torch.from_numpy(np.array( S_list[i],dtype=np.float32 )).to(device))
                 A_list_gpu.append(torch.from_numpy(np.array( A_list[i],dtype=np.float32 )).to(device))
                 
-            #转到GPU
+
             train_samples_gt=torch.from_numpy(train_samples_gt.astype(np.float32)).to(device)
             test_samples_gt=torch.from_numpy(test_samples_gt.astype(np.float32)).to(device)
             val_samples_gt=torch.from_numpy(val_samples_gt.astype(np.float32)).to(device)
-            #转到GPU
+
             train_samples_gt_onehot = torch.from_numpy(train_samples_gt_onehot.astype(np.float32)).to(device)
             test_samples_gt_onehot = torch.from_numpy(test_samples_gt_onehot.astype(np.float32)).to(device)
             val_samples_gt_onehot = torch.from_numpy(val_samples_gt_onehot.astype(np.float32)).to(device)
-            #转到GPU
+
             train_label_mask = torch.from_numpy(train_label_mask.astype(np.float32)).to(device)
             test_label_mask = torch.from_numpy(test_label_mask.astype(np.float32)).to(device)
             val_label_mask = torch.from_numpy(val_label_mask.astype(np.float32)).to(device)
@@ -280,41 +245,36 @@ for Neighbors in [0]: #0, 5,10,15,20
     
             def compute_loss(predict: torch.Tensor, reallabel_onehot: torch.Tensor, reallabel_mask: torch.Tensor):
                 real_labels = reallabel_onehot
-                # print("real_labels", torch.sum(real_labels))
-        
-                ##  加权交叉熵损失函数
-                we = -torch.mul(real_labels,torch.log(predict))
+                we = -torch.mul(real_labels,torch.log(predict+1e-15))
                 we = torch.mul(we, reallabel_mask)
     
-                #加权##################
-                we2 = torch.sum(real_labels, 0)   # 每类训练样本个数 加1是为了防止除0
-                we2 = 1. / (we2+ 1)  # 每类样本的权重
+                we2 = torch.sum(real_labels, 0)  
+                we2 = 1. / (we2+ 1)  
                 we2 = torch.unsqueeze(we2, 0)
                 we2 = we2.repeat([m * n, 1])
                 we = torch.mul(we, we2)
                 pool_cross_entropy = torch.sum(we)
-                return pool_cross_entropy #+ 0.01*reconstruction_loss
+                return pool_cross_entropy
             
-            # output= net(net_input)
             zeros = torch.zeros([m * n]).to(device).float()
             def evaluate_performance(network_output,train_samples_gt,train_samples_gt_onehot, require_AA_KPP=False,printFlag=True):
                 if False==require_AA_KPP:
                     with torch.no_grad():
-                        available_label_idx=(train_samples_gt!=0).float()#有效标签的坐标,用于排除背景
-                        available_label_count=available_label_idx.sum()#有效标签的个数
+                        available_label_idx=(train_samples_gt!=0).float()
+                        available_label_count=available_label_idx.sum()
                         correct_prediction =torch.where(torch.argmax(network_output, 1) ==torch.argmax(train_samples_gt_onehot, 1),available_label_idx,zeros).sum()
                         OA= correct_prediction.cpu()/available_label_count
                         return OA
                 else:
                     with torch.no_grad():
-                        #计算OA
-                        available_label_idx=(train_samples_gt!=0).float()#有效标签的坐标,用于排除背景
-                        available_label_count=available_label_idx.sum()#有效标签的个数
+                        #OA
+                        available_label_idx=(train_samples_gt!=0).float()
+                        available_label_count=available_label_idx.sum()
                         correct_prediction =torch.where(torch.argmax(network_output, 1) ==torch.argmax(train_samples_gt_onehot, 1),available_label_idx,zeros).sum()
                         OA= correct_prediction.cpu()/available_label_count
                         OA=OA.cpu().numpy()
                         
-                        # 计算AA
+                        # AA
                         zero_vector = np.zeros([class_count])
                         output_data=network_output.cpu().numpy()
                         train_samples_gt=train_samples_gt.cpu().numpy()
@@ -336,7 +296,7 @@ for Neighbors in [0]: #0, 5,10,15,20
                         test_AC_list = correct_perclass / count_perclass
                         test_AA = np.average(test_AC_list)
     
-                        # 计算KPP
+                        # KPP
                         test_pre_label_list = []
                         test_real_label_list = []
                         output_data = np.reshape(output_data, [m * n, class_count])
@@ -353,7 +313,6 @@ for Neighbors in [0]: #0, 5,10,15,20
                                                           test_real_label_list.astype(np.int16))
                         test_kpp = kappa
     
-                        # 输出
                         if printFlag:
                             print("test OA=", OA, "AA=", test_AA, 'kpp=', test_kpp)
                             print('acc per class:')
@@ -364,9 +323,7 @@ for Neighbors in [0]: #0, 5,10,15,20
                         KPP_ALL.append(test_kpp)
                         AVG_ALL.append(test_AC_list)
                         
-                        
-                        
-                        # 保存数据信息
+                        # save
                         f = open('results\\' + dataset_name + '_results.txt', 'a+')
                         str_results = '\n======================' \
                                       + " learning rate=" + str(learning_rate) \
@@ -384,12 +341,11 @@ for Neighbors in [0]: #0, 5,10,15,20
                         f.close()
                         return OA
                     
-            # evaluate_performance(output,train_samples_gt,train_samples_gt_onehot)
             optimizer = torch.optim.Adam(net.parameters(),lr=learning_rate)#,weight_decay=0.0001
-            # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,mode='min',factor=0.8, patience=2,  verbose=False, threshold=0.0001, threshold_mode='rel', cooldown=0, min_lr=0, eps=1e-08)
     
-            # 训练
+            # train the network
             best_loss=99999
+            best_OA=0
             Stop_Flag=0
             net.train()
             tic1 = time.clock()
@@ -409,17 +365,18 @@ for Neighbors in [0]: #0, 5,10,15,20
                         valOA = evaluate_performance(output, val_samples_gt, val_samples_gt_onehot)
                         print("{}\ttrain loss={}\t train OA={} val loss={}\t val OA={}".format(str(i + 1), trainloss, trainOA, valloss, valOA))
     
-                        if valloss < best_loss :
+                        if valloss < best_loss or valOA>best_OA:
                             best_loss = valloss
+                            best_OA=valOA
                             Stop_Flag=0
                             torch.save(net.state_dict(),"model\\best_model.pt")
-                            # print('save model...')
-
+                            print('save model...')
+                            
                     torch.cuda.empty_cache()
                     net.train()
             toc1 = time.clock()
             print("\n\n====================training done. starting evaluation...========================\n")
-            training_time=toc1 - tic1 + HierarchicalSegmentation_Time #分割耗时需要算进去
+            training_time=toc1 - tic1 + HierarchicalSegmentation_Time 
             Train_Time_ALL.append(training_time)
             
             torch.cuda.empty_cache()
@@ -428,121 +385,17 @@ for Neighbors in [0]: #0, 5,10,15,20
                 net.eval()
                 tic2 = time.clock()
                 # output,A_encoders, A_decoders = net(net_input)
-                output,encoder_features, decoder_features = net(net_input) ###############
+                output,encoder_features, decoder_features = net(net_input)
                 toc2 = time.clock()
                 testloss = compute_loss(output, test_samples_gt_onehot, test_label_mask)
                 testOA = evaluate_performance(output, test_samples_gt, test_samples_gt_onehot,require_AA_KPP=True,printFlag=False)
                 print("{}\ttest loss={}\t test OA={}".format(str(i + 1), testloss, testOA))
-                #计算
+                #
                 classification_map=torch.argmax(output, 1).reshape([height,width]).cpu()+1
                 Draw_Classification_Map(classification_map,"results\\"+dataset_name+str(testOA))
-                testing_time=toc2 - tic2 + HierarchicalSegmentation_Time #分割耗时需要算进去
+                testing_time=toc2 - tic2 + HierarchicalSegmentation_Time 
                 Test_Time_ALL.append(testing_time)
-                # sio.savemat(dataset_name+"softmax",{'softmax':output.reshape([height,width,-1]).cpu().numpy()})
                 
-                # 用户图边可视化
-                # np.savez(dataset_name+"A_encoders",
-                #          a1=A_encoders[0].cpu().numpy(),
-                #          a2=A_encoders[1].cpu().numpy(),
-                #          a3=A_encoders[2].cpu().numpy(),
-                #          a4=A_encoders[3].cpu().numpy())
-                # np.savez(dataset_name+"A_decoders",
-                #          a1=A_decoders[0].cpu().numpy(),
-                #          a2=A_decoders[1].cpu().numpy(),
-                #          a3=A_decoders[2].cpu().numpy(),
-                #          a4=A_decoders[3].cpu().numpy())
-                
-                # # 计算特征相关性
-                # test_gt_reshape=train_samples_gt.detach().cpu().numpy()
-                # for i in range(4):
-                #     df = decoder_features[-1 - i].detach().cpu().numpy()
-                #     df_last = decoder_features[-2 - i]
-                #     df_last=torch.mm(S_list_gpu[i], df_last).detach().cpu().numpy()
-                #     # df_last=torch.cat([df_last,df_last],dim=-1)
-                #     ed = encoder_features[i].detach().cpu().numpy()
-                #     if i==0: idx = np.where(test_gt_reshape>0)[0]
-                #     else:
-                #         test_gt_reshape = np.matmul(S_list_gpu[i - 1].detach().cpu().numpy().transpose(), test_gt_reshape)
-                #         idx = np.where(test_gt_reshape > 0)[0]
-                #     df = df[idx, :]
-                #     df_last = df_last[idx, :]
-                #     ed = ed[idx, :]
-                #     co1 = dcor.distance_correlation(df, ed)
-                #     co2 = dcor.distance_correlation(df, df_last)
-                #     print(co1, co2)
-
-                # # 只计算与Final Feature Map的相关性
-                # test_gt_reshape = train_samples_gt.detach().cpu().numpy()
-                # # test_gt_reshape = np.zeros_like(test_gt_reshape)
-                # # for i in range(test_gt_reshape.shape[0]):
-                # #     if random.random() < 0.10: test_gt_reshape[i] = 1
-                #
-                # final_feature_map = decoder_features[-1].detach().cpu().numpy()
-                # for i in range(4):
-                #     df_last = decoder_features[-2 - i]
-                #     df_last = torch.mm(S_list_gpu[i], df_last).detach().cpu().numpy()
-                #     ed = encoder_features[i].detach().cpu().numpy()
-                #     if i == 0:
-                #         idx = np.where(test_gt_reshape > 0)[0]
-                #     else:
-                #         test_gt_reshape = np.matmul(S_list_gpu[i - 1].detach().cpu().numpy().transpose(),
-                #                                     test_gt_reshape)
-                #         idx = np.where(test_gt_reshape > 0)[0]
-                #         final_feature_map=np.matmul(S_list_gpu[i - 1].detach().cpu().numpy().transpose(),
-                #                                     final_feature_map)
-                #
-                #     df = final_feature_map[idx, :]
-                #     df_last = df_last[idx, :]
-                #     ed = ed[idx, :]
-                #     co1 = dcor.distance_correlation(df, ed)
-                #     co2 = dcor.distance_correlation(df, df_last)
-                #     print(co1, co2)
-
-                # #############################################################
-                # # 将特征映射到每一类上,可视化
-                # def restoreOutputShape(featureMap,hierarchyIdx):
-                #     x=featureMap
-                #     for i in range(hierarchyIdx): x = torch.matmul(S_list_gpu[hierarchyIdx - i-1], x)
-                #     return x
-                # curr_gt = train_samples_gt.detach().cpu().numpy()
-                # from sklearn.linear_model import LogisticRegression
-                # from scipy.special import softmax
-                #
-                # for i in range(len(encoder_features)):
-                #     F=encoder_features[i]
-                #     F=restoreOutputShape(F,i)
-                #     F=F.detach().cpu().numpy()
-                #     train_s=F[np.where(curr_gt>0)[0]]
-                #     train_l=curr_gt[np.where(curr_gt>0)[0]]
-                #     lr_model = LogisticRegression()  # 调用模型，但是并未经过任何调参操作，使用默认值
-                #     lr_model.fit(train_s, train_l)  # 训练模型
-                #     Y=lr_model.decision_function(F)
-                #     Y=softmax(Y,axis=-1)
-                #     Y=np.reshape(Y,[height,width,-1])
-                #     for j in range(class_count):
-                #         plt.figure()
-                #         plt.imshow(Y[:,:,j],cmap = 'gray')
-                #         plt.axis('off')
-                #         plt.savefig("featuremap_of_coder\\" + dataset_name+"_class_"+str(j+1)+"_encoder_"+str(i+1)+".jpeg", dpi=300,bbox_inches = 'tight',pad_inches = 0)
-                # for i in range(len(decoder_features)):
-                #     F=decoder_features[4-i]
-                #     F=restoreOutputShape(F,i)
-                #     F=F.detach().cpu().numpy()
-                #     train_s=F[np.where(curr_gt>0)[0]]
-                #     train_l=curr_gt[np.where(curr_gt>0)[0]]
-                #     lr_model = LogisticRegression()  # 调用模型，但是并未经过任何调参操作，使用默认值
-                #     lr_model.fit(train_s, train_l)  # 训练模型
-                #     Y=lr_model.decision_function(F)
-                #     Y=softmax(Y,axis=-1)
-                #     Y=np.reshape(Y,[height,width,-1])
-                #     for j in range(class_count):
-                #         plt.figure()
-                #         plt.imshow(Y[:,:,j],cmap = 'gray')
-                #         plt.axis('off')
-                #         plt.savefig("featuremap_of_coder\\" + dataset_name+"_class_"+str(j+1)+"_decoder_"+str(i+1)+".jpeg", dpi=300,bbox_inches = 'tight',pad_inches = 0)
-
-                
-
             torch.cuda.empty_cache()
             del net
             
@@ -562,7 +415,7 @@ for Neighbors in [0]: #0, 5,10,15,20
         print("Average training time:{}".format(np.mean(Train_Time_ALL)))
         print("Average testing time:{}".format(np.mean(Test_Time_ALL)))
         
-        # 保存数据信息
+        # save information
         f = open('results\\' + dataset_name + '_results.txt', 'a+')
         str_results = '\n\n************************************************' \
         +"\nTrain ratio={}, Neighbors={}, Depth={}".format(curr_train_ratio,Neighbors,Unet_Depth) \
