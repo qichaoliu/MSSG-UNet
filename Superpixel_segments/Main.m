@@ -46,7 +46,7 @@ I=pcacomps(:,[3,2,1])';
 I=(mapminmax(I)+1)/2*255;
 I=reshape(uint8(I)',[h,w,3]);
 for i=1:3
-    I(:,:,i)=imadjust(histeq(I(:,:,i)));
+    I(:,:,i)=imadjust(histeq(I(:,:,i))); %%
 end
 I = imfilter(I, fspecial('unsharp',0.05), 'replicate');
 E=uint8(zeros([h,w]));
