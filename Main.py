@@ -81,42 +81,7 @@ for Neighbors in [0]: #0, 5,10,15,20
             max_epoch = 600  
             dataset_name = "KSC_" 
             pass
-        if FLAG == 5:
-            data_mat = sio.loadmat('..\\HyperImage_data\\Houston2013\\Houston.mat')
-            data = data_mat['Houston']
-            gt_mat = sio.loadmat('..\\HyperImage_data\\Houston2013\\Houston_GT_New.mat')
-            gt = gt_mat['Houston_GT']
-            
-            val_ratio = 0.01 
-            class_count = 15  
-            learning_rate = 5e-4  
-            max_epoch = 600 
-            dataset_name = "Houston_"  
-            pass
-        if FLAG == 6:
-            data_mat = sio.loadmat('..\\HyperImage_data\\HyRANK\\Loukia.mat')
-            data = data_mat['Loukia']
-            gt_mat = sio.loadmat('..\\HyperImage_data\\HyRANK\\Loukia_GT.mat')
-            gt = gt_mat['Loukia_GT']
-            
-            val_ratio = 0.01 
-            class_count = 14  
-            learning_rate = 5e-4  
-            max_epoch = 600  
-            dataset_name = "Loukia_" 
-            pass
-        if FLAG == 7:
-            data_mat = sio.loadmat('..\\HyperImage_data\\paviaC\\paviaC.mat')
-            data = data_mat['resultNew']
-            gt_mat = sio.loadmat('..\\HyperImage_data\\paviaC\\pavia_center_gt.mat')
-            gt = gt_mat['pavia_center_label']
-
-            val_ratio = 0.01  
-            class_count = 9  
-            learning_rate = 5e-4  
-            max_epoch = 600  
-            dataset_name = "paviaC_"  
-            pass
+        
 
         if samples_type == 'same_num': val_ratio = 1 ########
         
