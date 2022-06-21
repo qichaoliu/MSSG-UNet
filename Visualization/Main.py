@@ -9,7 +9,7 @@ import time
 from sklearn import preprocessing
 import torch
 import MSSGU
-from utils import Draw_Classification_Map,get_Samples_GT,GT_To_One_Hot,LabelProcess
+from utils import Draw_Classification_Map,get_Samples_GT,GT_To_One_Hot
 from SegmentMap import SegmentMap
 import h5py
 from scipy import misc
@@ -115,11 +115,6 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt_mat = sio.loadmat('..\\HyperImage_data\\Houston2013\\Houston_GT_15.mat')
             gt = gt_mat['Houston_GT']
         
-            data = data[20:320, 20:820, :]
-            gt = gt[20:320, 20:820]
-            class_count=len(set(np.reshape(gt,[-1])))-1
-            gt=LabelProcess(gt)
-        
             # 参数预设
             # train_ratio = 0.01  # 训练集比例。注意，训练集为按照‘每类’随机选取
             val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
@@ -185,9 +180,6 @@ for Neighbors in [0]: #0, 5,10,15,20
             gt = gt_mat['houstonU_gt']
             gt = np.transpose(gt, [1, 0])
 
-            data = data[:, :400, :]
-            gt = gt[:, :400]
-            gt=LabelProcess(gt)
             # 参数预设
             val_ratio = 0.01  # 测试集比例.注意，验证集选取为从测试集整体随机选取，非按照每类
             class_count = len(set(np.reshape(gt,[-1])))-1  # 样本类别数
